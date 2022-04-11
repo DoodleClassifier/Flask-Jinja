@@ -1,0 +1,19 @@
+.flex_container {
+    display: flex;
+    /* justify-content: center; */
+}
+
+.flex_container > div {
+    padding: 20px;
+}
+
+#resultsDiv {
+    color: lightslategray;
+    font-size: 24pt;
+    width: 30%;
+}
+
+button {
+    font-size: 24pt;
+    margin: 10px;
+}

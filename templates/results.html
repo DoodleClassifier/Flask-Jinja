@@ -1,0 +1,64 @@
+
+
+<script>
+    const objects = new Map([
+        [0, "Bowtie"],
+        [1, "Crown"],
+        [2, "Crown"],
+        [3, "EiffelTower"],
+        [4, "HitAirBalloon"],
+        [5, "HousePlant"],
+        [6, "Bed"],
+        [7, "Cat"],
+        [8, "Couch"],
+        [9, "Dog"],
+        [10, "Hand"],
+        [11, "Hat"],
+        [12, "Tractor"],
+    ]);
+
+    // Helper function to generate an array of strings, one for each object and the predicted percentage by the model. Takes in guess which is simply an array of the predicted percentages.
+    function makeGuessStrings(guess) {
+        guessText = [];
+
+        // Generate strings and associate them with the guess values
+        for (let key of objects.keys()) {
+            guessText.push({});
+            guessText[key].string = objects.get(key) + "<span style='float:right;'>" + (guess[key] * 100).toFixed(0) + "%</span><br>";
+            guessText[key].value = guess[key];
+        }
+
+        // Sort guess text array by descending value
+        guessText.sort(function (a, b) {
+            if (a.value < b.value) {
+                return 1;
+            } else if (a.value > b.value) {
+                return -1;
+            }
+            return 0;
+        });
+
+        // Color the top result black with a span, while other results will be grey
+        guessText[0].string = "<span style='color:black'>" + guessText[0].string + "</span>";
+
+        // Create string from guess text
+        let guessString = "";
+
+        for (let str of guessText) {
+            guessString += str.string;
+        }
+
+        return guessString;
+    }
+
+    // Get list of model's predictions from jinja variable (passed from app.py rendering results template)
+    let predictions = "{{ predictions }}";
+    predictions = JSON.parse(predictions)[0];
+
+    // Generate the string that will populate the guess div
+    guessString = makeGuessStrings(predictions);
+
+    // Set the guess/results div's content to the guess string
+    select("#resultsDiv").html(guessString);
+
+</script>
